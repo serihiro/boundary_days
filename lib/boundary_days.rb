@@ -13,8 +13,8 @@ class BoundaryDays
       self.new(Builder.new(true, false, options))
     end
 
-    def month
-      self.new(Builder.new(false, true))
+    def month(options = {})
+      self.new(Builder.new(false, true, options))
     end
   end
 
