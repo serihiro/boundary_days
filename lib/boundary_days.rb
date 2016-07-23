@@ -5,28 +5,36 @@ class BoundaryDays
   def_delegators :@builder, :build
 
   class << self
-    def all(options = {})
-      self.new(Builder.new(true, true, options))
+    def all
+      self.new(Builder.new.all)
     end
 
-    def week(options = {})
-      self.new(Builder.new(true, false, options))
+    def week
+      self.new(Builder.new.week)
     end
 
-    def month(options = {})
-      self.new(Builder.new(false, true, options))
+    def month
+      self.new(Builder.new.month)
     end
   end
 
   def from(value)
-    # TODO validation
     @builder.from = value
     self
   end
 
   def to(value)
-    # TODO validation
     @builder.to = value
+    self
+  end
+
+  def beginning_of_week_wday(value)
+    @builder.beginning_of_week_wday = value
+    self
+  end
+
+  def end_of_week_wday(value)
+    @builder.end_of_week_wday = value
     self
   end
 
@@ -35,24 +43,45 @@ class BoundaryDays
     DEFAULT_BEGINNING_OF_WEEK_WDAY = 1.freeze
     DEFAULT_END_OF_WEEK_WDAY = 5.freeze
 
-    def initialize(beginning_and_end_of_week = false, beginning_and_end_of_month = false, options = {})
-      @beginning_and_end_of_week = beginning_and_end_of_week
-      @beginning_and_end_of_month = beginning_and_end_of_month
-      @options = options
-
+    def initialize
+      @beginning_and_end_of_week = false
+      @beginning_and_end_of_month = false
+      @options = {}
       @boundary_days = []
+    end
+
+    def all
+      @beginning_and_end_of_month = true
+      @beginning_and_end_of_week = true
+      self
+    end
+
+    def month
+      @beginning_and_end_of_month = true
+      @beginning_and_end_of_week = false
+      self
+    end
+
+    def week
+      @beginning_and_end_of_month = false
+      @beginning_and_end_of_week = true
+      self
     end
 
     def build(base_date = Date.today)
       from_date = @from || base_date
       to_date = @to || base_date + DEFAULT_LIMIT_DAYS
-      beginning_of_week_wday = @options[:beginning_of_week_wday] || DEFAULT_BEGINNING_OF_WEEK_WDAY
-      end_of_week_wday = @options[:end_of_week_wday] || DEFAULT_END_OF_WEEK_WDAY
+      beginning_of_week_wday = @beginning_of_week_wday || DEFAULT_BEGINNING_OF_WEEK_WDAY
+      end_of_week_wday = @end_of_week_wday || DEFAULT_END_OF_WEEK_WDAY
 
+      @boundary_days = []
       if @beginning_and_end_of_week
         @boundary_days += beginning_and_end_of_week(from_date, to_date, beginning_of_week_wday, end_of_week_wday)
       end
-      @boundary_days += start_and_end_of_month(from_date, to_date) if @beginning_and_end_of_month
+
+      if @beginning_and_end_of_month
+        @boundary_days += beginning_and_end_of_month(from_date, to_date)
+      end
 
       @boundary_days.uniq.sort
     end
@@ -60,19 +89,39 @@ class BoundaryDays
     def beginning_and_end_of_week(from_date, to_date, beginning_of_week_wday, end_of_week_wday)
       return_days = []
 
-      first_beginning_of_week = from_date.wday == beginning_of_week_wday ?
-                                from_date :
-                                Date.new(from_date.year, from_date.month, from_date.day + 7 + beginning_of_week_wday - from_date.wday)
-      first_end_of_week = from_date.wday == end_of_week_wday ?
-                          from_date :
-                          Date.new(from_date.year, from_date.month, from_date.day + 7 + beginning_of_week_wday - from_date.wday)
+      first_beginning_of_week = if from_date.wday <= beginning_of_week_wday
+                                  Date.new(
+                                    from_date.year,
+                                    from_date.month,
+                                    from_date.day + beginning_of_week_wday - from_date.wday
+                                  )
+                                else
+                                  Date.new(
+                                    from_date.year,
+                                    from_date.month,
+                                    from_date.day + 7 + beginning_of_week_wday - from_date.wday
+                                  )
+                                end
+      first_end_of_week = if from_date.wday <= end_of_week_wday
+                            Date.new(
+                              from_date.year,
+                              from_date.month,
+                              from_date.day + end_of_week_wday - from_date.wday
+                            )
+                          else
+                            Date.new(
+                              from_date.year,
+                              from_date.month,
+                              from_date.day + 7 + end_of_week_wday - from_date.wday
+                            )
+                          end
       return_days += first_beginning_of_week.step(to_date, 7).to_a
       return_days += first_end_of_week.step(to_date, 7).to_a
 
       return_days
     end
 
-    def start_and_end_of_month(from_date, to_date)
+    def beginning_and_end_of_month(from_date, to_date)
       return_days = []
 
       return_days += from_date.day == 1 ?
