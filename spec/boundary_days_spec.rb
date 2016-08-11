@@ -5,16 +5,6 @@ describe BoundaryDays do
     context 'without options' do
       it { is_expected.not_to be_empty }
     end
-
-    context 'beginning_of_week_wday' do
-      let(:options) { { beginning_of_week_wday: 3 } }
-      it { is_expected.not_to be_empty }
-    end
-
-    context 'end_of_week_wday' do
-      let(:options) { { end_of_week_wday: 4 } }
-      it { is_expected.not_to be_empty }
-    end
   end
 
   context '.all' do
@@ -28,6 +18,24 @@ describe BoundaryDays do
     context '.build' do
       subject { BoundaryDays.week.build }
       include_examples 'common behaviors'
+    end
+
+    context '.beginning_of_week_wday' do
+      subject { BoundaryDays.week.beginning_of_week_wday(2).build }
+      include_examples 'common behaviors'
+
+      it 'start with wday 2' do
+        expect(subject.find { |date|date.wday == 2 } ).to be_truthy
+      end
+    end
+
+    context '.end_of_week_wday' do
+      subject { BoundaryDays.week.end_of_week_wday(4).build }
+      include_examples 'common behaviors'
+
+      it 'end with wday 4' do
+        expect(subject.find { |date|date.wday == 4 } ).to be_truthy
+      end
     end
   end
 
