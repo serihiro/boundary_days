@@ -1,3 +1,6 @@
+[![Gem Version](https://badge.fury.io/rb/boundary_days.svg)](https://badge.fury.io/rb/boundary_days)
+[![Build Status](https://travis-ci.org/serihiro/boundary_days.svg?branch=master)](https://travis-ci.org/serihiro/boundary_days)
+
 # BoundaryDays
 
 Generate Date object list of sensitive dates.
@@ -75,7 +78,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/boundary_days. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/serihiro/boundary_days. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
