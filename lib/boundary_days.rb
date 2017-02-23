@@ -1,4 +1,5 @@
 require 'boundary_days/version'
+require 'date'
 
 class BoundaryDays
   extend Forwardable
@@ -68,7 +69,7 @@ class BoundaryDays
       self
     end
 
-    def build(base_date = Date.today)
+    def build(base_date = ::Date.today)
       from_date = @from || base_date
       to_date = @to || base_date + DEFAULT_LIMIT_DAYS
       beginning_of_week_wday = @beginning_of_week_wday || DEFAULT_BEGINNING_OF_WEEK_WDAY
