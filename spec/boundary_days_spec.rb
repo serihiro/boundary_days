@@ -25,7 +25,7 @@ describe BoundaryDays do
       include_examples 'common behaviors'
 
       it 'start with wday 2' do
-        expect(subject.find { |date|date.wday == 2 } ).to be_truthy
+        expect(subject.find { |date|date.wday == 2 } ).not_to eq nil
       end
     end
 
@@ -34,7 +34,7 @@ describe BoundaryDays do
       include_examples 'common behaviors'
 
       it 'end with wday 4' do
-        expect(subject.find { |date|date.wday == 4 } ).to be_truthy
+        expect(subject.find { |date|date.wday == 4 } ).not_to eq nil
       end
     end
   end
