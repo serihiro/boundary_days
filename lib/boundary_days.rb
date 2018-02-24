@@ -91,30 +91,34 @@ class BoundaryDays
       return_days = []
 
       first_beginning_of_week = if from_date.wday <= beginning_of_week_wday
-                                  Date.new(
+                                  d = Date.new(
                                     from_date.year,
                                     from_date.month,
-                                    from_date.day + beginning_of_week_wday - from_date.wday
+                                    1
                                   )
+                                  d + from_date.day + beginning_of_week_wday - from_date.wday - 1
                                 else
-                                  Date.new(
+                                  d = Date.new(
                                     from_date.year,
                                     from_date.month,
-                                    from_date.day + 7 + beginning_of_week_wday - from_date.wday
+                                    1
                                   )
+                                  d + from_date.day + 7 + beginning_of_week_wday - from_date.wday - 1
                                 end
       first_end_of_week = if from_date.wday <= end_of_week_wday
-                            Date.new(
+                            d = Date.new(
                               from_date.year,
                               from_date.month,
-                              from_date.day + end_of_week_wday - from_date.wday
+                              1
                             )
+                            d + from_date.day + end_of_week_wday - from_date.wday - 1
                           else
-                            Date.new(
+                            d = Date.new(
                               from_date.year,
                               from_date.month,
-                              from_date.day + 7 + end_of_week_wday - from_date.wday
+                              1
                             )
+                            d + from_date.day + 7 + end_of_week_wday - from_date.wday - 1
                           end
       return_days += first_beginning_of_week.step(to_date, 7).to_a
       return_days += first_end_of_week.step(to_date, 7).to_a
