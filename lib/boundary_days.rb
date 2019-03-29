@@ -1,8 +1,9 @@
+require 'forwardable'
 require 'boundary_days/version'
 require 'date'
 
 class BoundaryDays
-  extend Forwardable
+  extend ::Forwardable
   def_delegators :@builder, :build
 
   class << self
