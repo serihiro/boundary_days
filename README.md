@@ -1,5 +1,4 @@
 [![Gem Version](https://badge.fury.io/rb/boundary_days.svg)](https://badge.fury.io/rb/boundary_days)
-[![Build Status](https://travis-ci.org/serihiro/boundary_days.svg?branch=master)](https://travis-ci.org/serihiro/boundary_days)
 
 # BoundaryDays
 
